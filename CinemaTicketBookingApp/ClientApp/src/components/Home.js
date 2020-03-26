@@ -40,7 +40,7 @@ export class Home extends Component {
 
   render () {
     return (
-      <Container>
+      <Container className="themed-container" fluid={true}>
         <header>Welcome to Berras Bio!</header>
         {this.content()}
         <footer>Something something Copyright</footer>

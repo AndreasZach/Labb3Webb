@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Collapse, Button } from 'reactstrap';
+import { Collapse, Button, Card, CardTitle, CardSubtitle, CardBody } from 'reactstrap'; 
 
 export class FilmItem extends PureComponent {
     constructor(props){
@@ -21,16 +21,18 @@ export class FilmItem extends PureComponent {
 
     render() {
         return (
-            <div id={this.props.film.id} onClick={() => this.handleDivClick()}>
-                {this.props.film.title}
-                {this.props.film.screenDateTime}
+            <Card className="align-items-center text-center" id={this.props.film.id} onClick={() => this.handleDivClick()}>
+                <CardTitle>Title: {this.props.film.title}</CardTitle>
+                <CardSubtitle>Time of Screening: {this.props.film.screenDateTime}</CardSubtitle>
                 <Collapse isOpen={this.state.isOpen}>
-                    <img src={this.props.film.imdbImgUrl} alt={this.props.film.title} class='thumbnail' />
-                    <p>{this.props.film.summary}</p>
-                    {this.props.film.Price}
-                    <Button color='Success' onClick={() => this.handleButtonClick(this.props.film.id)}>Book tickets for this film</Button>
+                    <CardBody>
+                        <img src={this.props.film.imdbImgUrl} alt={this.props.film.title} className="mw-100 img-thumbnail" />
+                        <p>{this.props.film.summary}</p>
+                        <p>Price per ticket: {this.props.film.price}:-</p>
+                        <Button color='success' onClick={() => this.handleButtonClick(this.props.film.id)}>Book tickets for this film</Button>
+                    </CardBody>
                 </Collapse>
-            </div>
+            </Card>
         );
     }
 }
