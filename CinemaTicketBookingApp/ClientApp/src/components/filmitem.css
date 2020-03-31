@@ -6,3 +6,9 @@ img {
 p {
     text-align: center;
 }
+
+.filmBooked {
+    font-size: large;
+    font-weight: bolder;
+    color: black;
+}

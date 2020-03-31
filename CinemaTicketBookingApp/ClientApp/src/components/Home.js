@@ -1,48 +1,26 @@
 import React, { Component } from 'react';
 import {Container} from 'reactstrap';
-import { FilmItem } from './FilmItem';
+import { FilmList } from './FilmList'
 
 export class Home extends Component {
   static displayName = Home.name;
   constructor(props) {
     super(props);
-    this.state = 
-    {
-      isLoaded: false,
-      films: [],
+    this.state = {
+      selectedFilm: null,
     }
 }
 
-  componentDidMount() {
-    this.fetchFilms() 
-  }
+setSelectedFilm(film) {
+  this.setState({selectedFilm: film})
+}
 
-  fetchFilms = () => {
-    if(!this.state.isLoaded){
-    
-      fetch('api/films')
-      .then(response => response.json())
-      .then(
-      (result) => 
-      {
-        this.setState({films: result, isLoaded: true}) 
-      })
-    }
-  }
-
-  content = () => {
-    return !this.state.isLoaded ?  <p>Loading...</p> 
-    : this.state.films.map(item => 
-      {
-        return <FilmItem film={item} />
-      });
-  }
-
+//
   render () {
     return (
       <Container className="themed-container" fluid={true}>
         <header>Welcome to Berras Bio!</header>
-        {this.content()}
+        {if()<FilmList />}
         <footer>Something something Copyright</footer>
       </Container>
     );
