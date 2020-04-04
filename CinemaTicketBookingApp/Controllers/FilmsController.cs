@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CinemaTicketBookingApp;
+using Newtonsoft.Json;
 
 namespace CinemaTicketBookingApp.Controllers
 {
@@ -44,15 +45,12 @@ namespace CinemaTicketBookingApp.Controllers
         // PUT: api/Films/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFilm(Guid id, Film film)
+        [HttpPut]
+        public async Task<IActionResult> PutFilm([FromBody]Film film)
         {
-            if (id != film.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(film).State = EntityState.Modified;
+            var entry = _context.Films.Add(film);
+            entry.State = EntityState.Unchanged;
+            _context.Update(film);
 
             try
             {
@@ -60,7 +58,7 @@ namespace CinemaTicketBookingApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FilmExists(id))
+                if (!FilmExists(film.Id))
                 {
                     return NotFound();
                 }

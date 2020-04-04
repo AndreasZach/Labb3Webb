@@ -140,28 +140,7 @@ namespace CinemaTicketBookingApp
                                 }
                             }
                         }
-
                     );
-
-                _ctx.Tickets.Add
-                        (
-                            new Ticket
-                            {
-                                Customer = new Customer
-                                {
-                                    Id = new Guid(),
-                                    FirstName = "PlaceHolderFirst",
-                                    LastName = "PlaceHolderLast",
-                                    Email = "Place@Hold.er"
-                                },
-                                Id = new Guid(),
-                                FilmID = new Guid(),
-                                WingId = new Guid(),
-                                SeatId = new Guid(),
-                                Expired = false
-                            }
-                        );
-
                 await _ctx.SaveChangesAsync();
             }
         }

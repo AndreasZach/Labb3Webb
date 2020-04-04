@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Cosmos;
+using CinemaTicketBookingApp;
 
 namespace CinemaTicketBookingApp
 {
@@ -14,15 +15,13 @@ namespace CinemaTicketBookingApp
         {
         }
 
-        // public DbSet<Customer> Customers { get; set; }
-
         public DbSet<Film> Films { get; set; }
 
-        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<BookingDetails> BookingDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Ticket>().OwnsOne(c => c.Customer);
+            modelBuilder.Entity<BookingDetails>().OwnsMany(t => t.Tickets);
             modelBuilder.Entity<Film>().OwnsMany(w => w.Wings, s =>
             {
                 s.OwnsMany(s => s.Seats);

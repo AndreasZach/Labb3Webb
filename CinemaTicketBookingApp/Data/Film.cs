@@ -10,7 +10,6 @@ namespace CinemaTicketBookingApp
     {
         public Guid Id { get; set; }
 
-        [DisplayFormat(DataFormatString = "{yyyy/mm/dd hh:mm}")]
         public DateTime ScreenDateTime { get; set; }
 
         public string Title { get; set; }
@@ -21,6 +20,6 @@ namespace CinemaTicketBookingApp
         
         public string Summary { get; set; }
         
-        public ICollection<Wing> Wings { get; set; }
+        public List<Wing> Wings { get; set; }
     }
 }
