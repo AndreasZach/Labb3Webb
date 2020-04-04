@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 
 namespace CinemaTicketBookingApp
 {
@@ -38,6 +39,9 @@ namespace CinemaTicketBookingApp
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             }));
+
+            services.AddMvc()
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

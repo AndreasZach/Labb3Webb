@@ -11,6 +11,8 @@ namespace CinemaTicketBookingApp
 
         public string WingAreaName { get; set; }
 
-        public virtual ICollection<Seat> Seats { get; set; }   
+        public int? FreeSeats { get; set; } = null;
+
+        public List<Seat> Seats { get; set; }   
     }
 }

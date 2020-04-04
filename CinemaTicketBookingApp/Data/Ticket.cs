@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,16 +8,17 @@ namespace CinemaTicketBookingApp
 {
     public class Ticket
     {
-        public virtual Customer Customer { get; set; }
+        public Guid Id { get; set; } = new Guid();
 
-        public Guid Id { get; set; }
+        public string FilmTitle { get; set; }
 
-        public Guid FilmID { get; set; }
+        public DateTime FilmTime { get; set; }
 
-        public Guid WingId { get; set; }
+        public string WingName { get; set; }
 
+        [NotMapped]
         public Guid SeatId { get; set; }
 
-        public bool Expired { get; set; }
+        public int SeatNumber { get; set; }
     }
 }

@@ -1,31 +1,48 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react'
+import { ButtonGroup, Button } from 'reactstrap';
 
 export class Counter extends Component {
-  static displayName = Counter.name;
+    constructor(props) {
+        super(props);
+        this.state={
+            count: 0,
+        }
+    }
 
-  constructor(props) {
-    super(props);
-    this.state = { currentCount: 0 };
-    this.incrementCounter = this.incrementCounter.bind(this);
-  }
+    handleClick = (num) => {
+        num ? this.setState({count: this.state.count + 1}) : this.setState({count: this.state.count - 1})
+    }
 
-  incrementCounter() {
-    this.setState({
-      currentCount: this.state.currentCount + 1
-    });
-  }
+    //getFreeSeats = (wingId) => {
+    //    return this.state.film.wings[wingId].seats.filter(b => b.booked === false);
+    //}
 
-  render() {
-    return (
-      <div>
-        <h1>Counter</h1>
+    render() {
 
-        <p>This is a simple example of a React component.</p>
-
-        <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
-
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button>
-      </div>
-    );
-  }
+        return (
+            <Fragment>
+                <label>{this.state.count}</label>
+                <ButtonGroup>
+                    <Button 
+                    disabled={(this.state.count >= this.props.max) || (this.state.count >= 12)} 
+                    onClick={() => this.handleClick(1)}
+                    >
+                        Add
+                    </Button>
+                    <Button 
+                    disabled={this.state.count <= 0} 
+                    onClick={() => this.handleClick(0)}
+                    >
+                        Remove
+                    </Button>
+                </ButtonGroup>
+                <Button
+                disabled={this.state.count < 1} 
+                onClick={() => this.props.commit(this.state.count)}
+                >
+                    Confirm purchase
+                </Button>
+            </Fragment>
+        );
+    }
 }
