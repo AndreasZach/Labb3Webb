@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CinemaTicketBookingApp;
+using Newtonsoft.Json;
 
 namespace CinemaTicketBookingApp.Controllers
 {
@@ -79,10 +80,15 @@ namespace CinemaTicketBookingApp.Controllers
         [HttpPost]
         public async Task<ActionResult<BookingDetails>> PostBookingDetails([FromBody]BookingDetails bookingDetails)
         {
-            _context.BookingDetails.Add(bookingDetails);
-            await _context.SaveChangesAsync();
+            if(bookingDetails.Tickets.Count() <= 12)
+            {
+                _context.BookingDetails.Add(bookingDetails);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBookingDetails", new { id = bookingDetails.Id }, bookingDetails);
+                return CreatedAtAction("GetBookingDetails", new { id = bookingDetails.Id }, bookingDetails);
+            }
+            
+            return BadRequest(new { error="User tried to book more than 12 tickets."});
         }
 
         // DELETE: api/BookingDetails/5

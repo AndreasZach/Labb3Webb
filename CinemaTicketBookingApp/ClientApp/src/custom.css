@@ -3,12 +3,80 @@ a {
   color: #0366d6;
 }
 
+body {
+  background-color: rgb(4, 1, 36);
+}
+
 code {
   color: #E01A76;
+}
+
+.rounded {
+  border-radius: 10px;
+}
+
+.color--dark {
+  color: #003049;
+}
+
+.bgcolor--dark {
+  background-color: #003049;
+}
+
+.color--blackblue {
+  color: rgb(4, 1, 36)
+}
+
+.bgcolor--darkblue {
+  background-color: rgb(14, 0, 138);
+}
+
+.color--orange {
+  color: #F77F00;
+}
+
+.bgcolor--orange {
+  background-color: #F77F00;
+}
+
+.bgcolor--gold {
+  background-color: #FCBF49;
+}
+
+.color--gold {
+  color: #FCBF49;
+}
+
+.color--pale {
+  color: #EAE2B7;
+}
+
+.bgcolor--pale {
+  background-color: #EAE2B7;
+}
+
+.shadow--text {
+  text-shadow: -1px -1px 0 #003049, 1px -1px 0 #003049, -1px 1px 0 #003049, 1px 1px 0 #003049;
 }
 
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+}
+
+.unselectable {
+  user-select: none;
+}
+
+@media (max-width: 200px) {
+  * {
+    overflow: scroll;
+  }
+}
+
+@media (min-width: 1080px){
+  .themed-container{
+    width: 75%
+  }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Container, Button} from 'reactstrap';
 import { FilmItem } from './FilmItem';
+import FetchData from './FetchData';
 
 export class FilmList extends Component {
     static displayName = FilmList.name;
@@ -19,77 +20,52 @@ export class FilmList extends Component {
         if(!this.state.isLoaded)
             this.requestUpdateData()
     }
-    
-    fetchFilms = () => {
-        this.setState({isLoaded: false});
-        fetch('api/films')
-        .then(response => response.json())
-        .then(
-        (result) => 
-        {
-          result.forEach(item => 
-            { 
-                return (
-                item.Wings.forEach(w => {
-                    return w.FreeSeats = w.Seats.filter(s => s.Booked === false).length;
-                }));
-            })
-            result.sort((a,b) => new Date(a.ScreenDateTime) - new Date(b.ScreenDateTime));
-            this.setState({films: [].concat(result), isLoaded: true})
-        })
-      }
 
-    sortBySeats = () => {
+    sortFilms = (sortBy) => {
         this.setState({isLoaded: false});
-        let orderBySeats = !this.state.orderBySeats;
-        let orderByTime = !this.state.orderByTime;
-        const sortedFilms = [].concat(this.state.films)
+        let sortedFilms = [];
+        if(sortBy === 'seats'){
+            sortedFilms = [].concat(this.state.films)
             .sort((a,b) => (b.Wings[0].FreeSeats + b.Wings[1].FreeSeats) - (a.Wings[0].FreeSeats + a.Wings[1].FreeSeats))
-            .map(item => item);
+            .map(item => item)
+        }
+        if(sortBy === 'time') {
+            sortedFilms = [].concat(this.state.films)
+            .sort((a,b) => new Date(b.ScreenDateTime) - new Date(a.ScreenDateTime))
+            .map(item => item)
+        }
         this.setState({
-            orderBySeats: orderBySeats,
-            orderByTime: orderByTime,
-            films: sortedFilms,
-            isLoaded: true
-        })
-        
-    }
-
-    sortByTime = () => {
-        this.setState({isLoaded: false});
-        let orderBySeats = !this.state.orderBySeats;
-        let orderByTime = !this.state.orderByTime;
-        const sortedFilms = [].concat(this.state.films)
-            .sort((a,b) => new Date(a.ScreenDateTime) - new Date(b.ScreenDateTime))
-            .map(item => item);
-        
-            this.setState({
-            orderBySeats: orderBySeats,
-            orderByTime: orderByTime,
+            orderBySeats: !this.state.orderBySeats,
+            orderByTime: !this.state.orderByTime,
             films: sortedFilms,
             isLoaded: true
         })
     }
 
     requestUpdateData = () => {
-        this.fetchFilms();
+        this.setState({isLoaded: false});
+        FetchData.GetFilmItems().then((data) => {
+            this.setState({films: data ? [].concat(data) : [], isLoaded: true});
+        });
     }
 
     render () {
         return (
-            <Container className="themed-container" fluid={true}>
-                <h4>Order by:</h4>
-                <Button color="primary" disabled={this.state.orderByTime} onClick={this.sortByTime}>
-                Screening Time
-                </Button>
-                <Button color="primary" disabled={this.state.orderBySeats} onClick={this.sortBySeats}>
+            <Container className="themed-container align-items-center text-center" fluid={true}>
+                <h5 className="color--pale">Order by:</h5>
+                <Button className="m-1" color="primary" disabled={this.state.orderBySeats} onClick={() => this.sortFilms('seats')}>
                 Available Seats
                 </Button>
-                {!this.state.isLoaded ?  <p>Loading...</p> 
-                : this.state.films.map((item, i) => 
-                {
-                    return <FilmItem key={i} film={item} requestUpdate={this.requestUpdateData} />
-                })}
+                <Button className="m-1" color="primary" disabled={this.state.orderByTime} onClick={() => this.sortFilms('time')}>
+                Screening Time
+                </Button>
+                {!this.state.isLoaded ?  
+                <p>Loading...</p> :
+                this.state.films.map((item, i) => 
+                    {
+                        return <FilmItem key={i} film={item} requestUpdate={this.requestUpdateData} />
+                    })
+                }
             </Container>
         );
     }

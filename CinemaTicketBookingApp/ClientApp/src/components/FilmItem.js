@@ -1,8 +1,10 @@
 import React, { Component, Fragment} from 'react';
 import { Collapse, Button, Card, CardTitle, CardSubtitle, CardBody } from 'reactstrap';
 import { Booking } from './Booking';
+import './FilmItem.css'
 
 export class FilmItem extends Component {
+    static displayName = FilmItem.name;
     constructor(props){
         super(props);
         this.state={
@@ -33,11 +35,10 @@ export class FilmItem extends Component {
         });
     }
 
-    //Create class to style fully booked items in css
     content = () => {
         if(this.state.fullyBooked) {
             return (
-                <div className="w-100 p-3 filmBooked"> 
+                <div className="w-100 p-3 font-weight-bold"> 
                     <p>Fully booked! Try again tomorrow.</p>
                 </div>
             );
@@ -45,8 +46,9 @@ export class FilmItem extends Component {
         else {
             return (
             <Fragment>
-                <p>Seats available: {this.props.film.Wings[0].FreeSeats + this.props.film.Wings[1].FreeSeats} Price per ticket: {this.props.film.Price}:-</p>
-                <Button 
+                <h6>Seats available: {this.props.film.Wings[0].FreeSeats + this.props.film.Wings[1].FreeSeats}</h6>
+                <h6> Price per ticket: {this.props.film.Price}:-</h6>
+                <Button className="m-1" 
                 disabled={this.props.film.Wings[0].FreeSeats < 1} 
                 color='success' 
                 onClick={() => this.openModal(this.props.film.Wings[0])}> 
@@ -56,7 +58,7 @@ export class FilmItem extends Component {
                    'Fully Booked'
                    }
                 </Button>
-                <Button 
+                <Button className="m-1"
                 disabled={this.props.film.Wings[1].FreeSeats < 1}
                 color="success"
                 onClick={() => this.openModal(this.props.film.Wings[1])}>
@@ -76,13 +78,17 @@ export class FilmItem extends Component {
             );
         }
     }
-//<Button color="primary" onClick={this.toggleCollapse}></Button>
+
     render() {
-        
+        const classNames = `${this.state.fullyBooked ? 'filmBooked' : "bgcolor--pale color--blackblue"} align-items-center text-center m-1`;
         return (
-            <Card className="align-items-center text-center" onClick={this.toggleCollapse} >
-                <CardTitle>Title: {this.props.film.Title}</CardTitle>
-                <CardSubtitle>Time of Screening: {new Date(this.props.film.ScreenDateTime).toLocaleString('sv-SE')}</CardSubtitle>
+            <Card className={classNames} onClick={this.toggleCollapse} >
+                <CardTitle>
+                    <span className="unselectable">Title: {this.props.film.Title}</span>
+                </CardTitle>
+                <CardSubtitle>
+                    <span className="unselectable">Time of Screening: {new Date(this.props.film.ScreenDateTime).toLocaleString('sv-SE')}</span>
+                </CardSubtitle>
                 <Collapse isOpen={this.state.isOpen}>
                     <CardBody>
                         <img src={this.props.film.ImdbImgUrl} alt={this.props.film.Title} className="mw-100 img-thumbnail" />

@@ -8,8 +8,6 @@ p {
 }
 
 .filmBooked {
-    font-size: large;
-    font-weight: bolder;
     color: black;
-    background-color: #fc7f03;
+    background-color: darkgray;
 }

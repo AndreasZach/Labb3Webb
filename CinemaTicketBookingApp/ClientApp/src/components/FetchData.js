@@ -1,59 +1,65 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
-export class FetchData extends Component {
+export default class FetchData extends Component {
   static displayName = FetchData.name;
 
-  constructor(props) {
-    super(props);
-    this.state = { forecasts: [], loading: true };
+  
+  static PostBookingDetails = async (tickets) => {
+    return fetch('api/bookingdetails', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({tickets})
+    })
+    .then(response => response.json())
+    .catch(err => this.fetchFailure(err));
   }
 
-  componentDidMount() {
-    this.populateWeatherData();
+  static UpdateFilmItem = async (filmChanges) => {
+      return fetch('api/films', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: (JSON.stringify({
+          Id: filmChanges.Id, 
+          ScreenDateTime: filmChanges.ScreenDateTime,
+          Title: filmChanges.Title,
+          Price: filmChanges.Price,
+          ImdbImgUrl: filmChanges.ImdbImgUrl,
+          Summary: filmChanges.Summary,
+          Wings: filmChanges.Wings
+      }))})
+      .then(response => response.text())
+      .catch(err => this.fetchFailure(err));
   }
 
-  static renderForecastsTable(forecasts) {
-    return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
+  static GetFilmItems = async () => {
+    return fetch('api/films')
+      .then(response => {
+        if(!response.status === 201)
+          throw Error('Failed to get films.')
+        
+        return response.json()})
+      .then(
+      (result) => 
+      {
+        result.forEach(item => 
+          { 
+              return (
+              item.Wings.forEach(w => {
+                  return w.FreeSeats = w.Seats.filter(s => s.Booked === false).length;
+              }));
+          })
+          return (result.sort((a,b) => new Date(b.ScreenDateTime) - new Date(a.ScreenDateTime)));
+      })
+      .catch(err => this.fetchFailure(err))
   }
 
-  render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
-
-    return (
-      <div>
-        <h1 id="tabelLabel" >Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
-        {contents}
-      </div>
-    );
-  }
-
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
-    const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
+  static fetchFailure(err){
+    alert(err);
   }
 }

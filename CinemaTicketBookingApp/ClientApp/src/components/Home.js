@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { FilmList } from './FilmList'
+import { Header } from './Header';
 
 export class Home extends Component {
   static displayName = Home.name;
 
-//setSelectedFilm = (film) =>  {
-//  const newSelection = film;
-//  this.setState({selectedFilm: newSelection})
-//}
-
-//
   render () {
     return (
+      <Fragment>
+        <Header />
         <FilmList />
+      </Fragment>
     );
   }
 }

@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import { ButtonGroup, Button } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 export class Counter extends Component {
+    static displayName = Counter.name;
     constructor(props) {
         super(props);
         this.state={
@@ -10,36 +11,37 @@ export class Counter extends Component {
     }
 
     handleClick = (num) => {
-        num ? this.setState({count: this.state.count + 1}) : this.setState({count: this.state.count - 1})
+        num ? 
+        this.setState({count: this.state.count + 1}) : 
+        this.setState({count: this.state.count - 1})
     }
-
-    //getFreeSeats = (wingId) => {
-    //    return this.state.film.wings[wingId].seats.filter(b => b.booked === false);
-    //}
 
     render() {
 
         return (
             <Fragment>
-                <label>{this.state.count}</label>
-                <ButtonGroup>
-                    <Button 
+                <div>{this.state.count}</div>
+                <div>
+                    <Button
+                    color="primary"
                     disabled={(this.state.count >= this.props.max) || (this.state.count >= 12)} 
                     onClick={() => this.handleClick(1)}
-                    >
+                    className="w-50 my-1">
                         Add
                     </Button>
                     <Button 
+                    color="primary"
                     disabled={this.state.count <= 0} 
                     onClick={() => this.handleClick(0)}
-                    >
+                    className="w-50 my-1">
                         Remove
                     </Button>
-                </ButtonGroup>
+                </div>
                 <Button
+                color="primary"
                 disabled={this.state.count < 1} 
                 onClick={() => this.props.commit(this.state.count)}
-                >
+                block>
                     Confirm purchase
                 </Button>
             </Fragment>
