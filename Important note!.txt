@@ -1,0 +1,2 @@
+Make sure you've entered the correct CosmosDB connection details, and that you have CosmosDB running as you launch the app.
+The application seeds the database if it detects no data as you launch the program.

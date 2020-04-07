@@ -1,7 +1,6 @@
 import React, { Component, Fragment} from 'react';
 import { Collapse, Button, Card, CardTitle, CardSubtitle, CardBody } from 'reactstrap';
 import { Booking } from './Booking';
-import './FilmItem.css'
 
 export class FilmItem extends Component {
     static displayName = FilmItem.name;
@@ -87,7 +86,7 @@ export class FilmItem extends Component {
                     <span className="unselectable">Title: {this.props.film.Title}</span>
                 </CardTitle>
                 <CardSubtitle>
-                    <span className="unselectable">Time of Screening: {new Date(this.props.film.ScreenDateTime).toLocaleString('sv-SE')}</span>
+                    <span className="unselectable">Time of Screening: {new Date(this.props.film.ScreenDateTime).toLocaleTimeString('sv-SE')}</span>
                 </CardSubtitle>
                 <Collapse isOpen={this.state.isOpen}>
                     <CardBody>

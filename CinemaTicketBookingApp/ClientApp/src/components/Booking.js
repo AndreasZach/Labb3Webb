@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import {Counter} from './Counter';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Container} from 'reactstrap';
 import FetchData from './FetchData';
+import { SeatGrid } from './SeatGrid'
 
 export class Booking extends Component {
     static displayName = Booking.name;
@@ -13,14 +13,13 @@ export class Booking extends Component {
         }
     }
 
-    commitBooking = (ticketCount) => {
+    commitBooking = (seats) => {
         const wingIndex = this.props.film.Wings.findIndex(w => w === this.props.selectedWing);
-        const seats = this.props.film.Wings[wingIndex].Seats.filter(s => s.Booked === false).slice(0, ticketCount);
         const tickets = [].concat(seats.map(s => ({
             filmTitle: this.props.film.Title,
+            filmId: this.props.film.Id,
             filmTime: this.props.film.ScreenDateTime,
             wingName: this.props.film.Wings[wingIndex].WingAreaName,
-            seatId: s.Id,
             seatNumber: s.SeatNumber,
         })));
         
@@ -46,28 +45,30 @@ export class Booking extends Component {
     render() {
         return (
             <Modal className="align-items-center text-center" centered={true} isOpen={this.props.setOpen}>
-                <ModalHeader>
-                    {
-                    (!this.state.bookingComplete) ? 
-                    <p>How many tickets do you wish to purchase?</p> :
-                    (!this.state.bookingError && this.state.bookingComplete) ?
-                        <p>Successfully booked your tickets!</p> :
-                        <p>Could not book tickets due to the following error: {this.state.bookingError} </p>}
-                </ModalHeader>
-                <ModalBody>
-                    {!this.state.bookingComplete ?
-                    <Counter 
-                    commit={this.commitBooking} 
-                    max={this.props.selectedWing.FreeSeats} /> : 
-                        null
-                }
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="danger" onClick={
-                        !this.state.bookingComplete ? 
-                        this.props.closeModal : 
-                        this.props.requestUpdate} block>Close</Button>
-                </ModalFooter>
+                <Container className="themed-container" fluid={true}>
+                    <ModalHeader>
+                        {
+                        (!this.state.bookingComplete) ? 
+                        <p>How many tickets do you wish to purchase?</p> :
+                        (!this.state.bookingError && this.state.bookingComplete) ?
+                            <p>Successfully booked your tickets!</p> :
+                            <p>Could not book tickets due to the following error: {this.state.bookingError} </p>}
+                    </ModalHeader>
+                    <ModalBody>
+                        {!this.state.bookingComplete ?
+                        <SeatGrid selectedWing={this.props.selectedWing} commitBooking={this.commitBooking}/> : 
+                            null
+                    }
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="danger" onClick={
+                            !this.state.bookingComplete ? 
+                            this.props.closeModal : 
+                            this.props.requestUpdate} block>
+                                Close
+                        </Button>
+                    </ModalFooter>
+                </Container>
             </Modal>
         );
     }

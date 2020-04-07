@@ -18,45 +18,39 @@ export default class FetchData extends Component {
   }
 
   static UpdateFilmItem = async (filmChanges) => {
-      return fetch('api/films', {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: (JSON.stringify({
-          Id: filmChanges.Id, 
-          ScreenDateTime: filmChanges.ScreenDateTime,
-          Title: filmChanges.Title,
-          Price: filmChanges.Price,
-          ImdbImgUrl: filmChanges.ImdbImgUrl,
-          Summary: filmChanges.Summary,
-          Wings: filmChanges.Wings
-      }))})
-      .then(response => response.text())
-      .catch(err => this.fetchFailure(err));
+    return fetch('api/films', {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: (JSON.stringify({
+      Id: filmChanges.Id, 
+      ScreenDateTime: filmChanges.ScreenDateTime,
+      Title: filmChanges.Title,
+      Price: filmChanges.Price,
+      ImdbImgUrl: filmChanges.ImdbImgUrl,
+      Summary: filmChanges.Summary,
+      Wings: filmChanges.Wings
+    }))})
+    .then(response => response.text())
+    .catch(err => this.fetchFailure(err));
   }
 
   static GetFilmItems = async () => {
     return fetch('api/films')
-      .then(response => {
-        if(!response.status === 201)
-          throw Error('Failed to get films.')
-        
-        return response.json()})
-      .then(
-      (result) => 
-      {
-        result.forEach(item => 
-          { 
-              return (
-              item.Wings.forEach(w => {
-                  return w.FreeSeats = w.Seats.filter(s => s.Booked === false).length;
-              }));
-          })
-          return (result.sort((a,b) => new Date(b.ScreenDateTime) - new Date(a.ScreenDateTime)));
+    .then(response => response.json())
+    .then((result) => {
+      result.forEach(item => 
+        { 
+          return (
+          item.Wings.forEach(w => {
+              return w.FreeSeats = w.Seats.filter(s => s.Booked === false).length;
+          }));
+        })
+        return (result.sort((a,b) => new Date(b.ScreenDateTime) - new Date(a.ScreenDateTime)));
       })
-      .catch(err => this.fetchFailure(err))
+    .catch(err => this.fetchFailure(err))
   }
 
   static fetchFailure(err){

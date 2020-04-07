@@ -21,14 +21,12 @@ namespace CinemaTicketBookingApp.Controllers
             _context = context;
         }
 
-        // GET: api/BookingDetails
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookingDetails>>> GetBookingDetails()
         {
             return await _context.BookingDetails.ToListAsync();
         }
 
-        // GET: api/BookingDetails/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BookingDetails>> GetBookingDetails(Guid id)
         {
@@ -42,9 +40,7 @@ namespace CinemaTicketBookingApp.Controllers
             return bookingDetails;
         }
 
-        // PUT: api/BookingDetails/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBookingDetails(Guid id, BookingDetails bookingDetails)
         {
@@ -74,10 +70,6 @@ namespace CinemaTicketBookingApp.Controllers
             return NoContent();
         }
 
-        // POST: api/BookingDetails
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
         public async Task<ActionResult<BookingDetails>> PostBookingDetails([FromBody]BookingDetails bookingDetails)
         {
             if(bookingDetails.Tickets.Count() <= 12)
@@ -91,7 +83,6 @@ namespace CinemaTicketBookingApp.Controllers
             return BadRequest(new { error="User tried to book more than 12 tickets."});
         }
 
-        // DELETE: api/BookingDetails/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<BookingDetails>> DeleteBookingDetails(Guid id)
         {

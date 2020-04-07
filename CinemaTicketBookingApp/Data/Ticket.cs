@@ -16,9 +16,6 @@ namespace CinemaTicketBookingApp
 
         public string WingName { get; set; }
 
-        [NotMapped]
-        public Guid SeatId { get; set; }
-
         public int SeatNumber { get; set; }
     }
 }

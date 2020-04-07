@@ -21,14 +21,12 @@ namespace CinemaTicketBookingApp.Controllers
             _context = context;
         }
 
-        // GET: api/Films
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Film>>> GetFilms()
         {
             return await _context.Films.ToListAsync();
         }
 
-        // GET: api/Films/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Film>> GetFilm(Guid id)
         {
@@ -42,9 +40,6 @@ namespace CinemaTicketBookingApp.Controllers
             return film;
         }
 
-        // PUT: api/Films/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut]
         public async Task<IActionResult> PutFilm([FromBody]Film film)
         {
@@ -71,9 +66,6 @@ namespace CinemaTicketBookingApp.Controllers
             return NoContent();
         }
 
-        // POST: api/Films
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Film>> PostFilm(Film film)
         {
@@ -83,7 +75,6 @@ namespace CinemaTicketBookingApp.Controllers
             return CreatedAtAction("GetFilm", new { id = film.Id }, film);
         }
 
-        // DELETE: api/Films/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Film>> DeleteFilm(Guid id)
         {

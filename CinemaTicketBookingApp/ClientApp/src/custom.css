@@ -1,26 +1,28 @@
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
-
 body {
   background-color: rgb(4, 1, 36);
 }
 
-code {
-  color: #E01A76;
+img {
+  max-height: 50vh;
+  max-width: 100%;
+}
+
+p {
+  text-align: center;
+}
+
+.filmBooked {
+  color: black;
+  background-color: darkgray;
 }
 
 .rounded {
   border-radius: 10px;
 }
 
-.color--dark {
-  color: #003049;
-}
-
-.bgcolor--dark {
-  background-color: #003049;
+.seatBtn {
+  height: 40px;
+  width: 40px;
 }
 
 .color--blackblue {
@@ -29,22 +31,6 @@ code {
 
 .bgcolor--darkblue {
   background-color: rgb(14, 0, 138);
-}
-
-.color--orange {
-  color: #F77F00;
-}
-
-.bgcolor--orange {
-  background-color: #F77F00;
-}
-
-.bgcolor--gold {
-  background-color: #FCBF49;
-}
-
-.color--gold {
-  color: #FCBF49;
 }
 
 .color--pale {
@@ -57,12 +43,6 @@ code {
 
 .shadow--text {
   text-shadow: -1px -1px 0 #003049, 1px -1px 0 #003049, -1px 1px 0 #003049, 1px 1px 0 #003049;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
 }
 
 .unselectable {
