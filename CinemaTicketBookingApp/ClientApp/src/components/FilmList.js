@@ -13,6 +13,7 @@ export class FilmList extends Component {
         orderByTime: true,
         isLoaded: false,
         films: [],
+        error: "",
       }
     }
 
@@ -45,7 +46,12 @@ export class FilmList extends Component {
     requestUpdateData = () => {
         this.setState({isLoaded: false});
         FetchData.GetFilmItems().then((data) => {
-            this.setState({films: data ? [].concat(data) : [], isLoaded: true});
+            if (data.error) {
+                this.setState({error: data.error, isLoaded: true})
+            }
+            else{
+                this.setState({films: data ? [].concat(data) : [], isLoaded: true});
+            }
         });
     }
 
@@ -59,12 +65,14 @@ export class FilmList extends Component {
                 <Button className="m-1" color="primary" disabled={this.state.orderByTime} onClick={() => this.sortFilms('time')}>
                 Screening Time
                 </Button>
-                {!this.state.isLoaded ?  
-                <p>Loading...</p> :
-                this.state.films.map((item, i) => 
-                    {
-                        return <FilmItem key={i} film={item} requestUpdate={this.requestUpdateData} />
-                    })
+                {!this.state.isLoaded ?
+                <p className="color--pale">Loading...</p> :
+                    !this.state.error ?
+                    this.state.films.map((item, i) => 
+                        {
+                            return <FilmItem key={i} film={item} requestUpdate={this.requestUpdateData} />
+                        }) :
+                    <p className="text-danger">{this.state.error}</p>
                 }
             </Container>
         );

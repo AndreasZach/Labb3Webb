@@ -41,6 +41,7 @@ export default class FetchData extends Component {
     return fetch('api/films')
     .then(response => response.json())
     .then((result) => {
+      if(Array.isArray(result)){
       result.forEach(item => 
         { 
           return (
@@ -49,7 +50,10 @@ export default class FetchData extends Component {
           }));
         })
         return (result.sort((a,b) => new Date(b.ScreenDateTime) - new Date(a.ScreenDateTime)));
-      })
+      }
+      else{
+        return result;
+      }})
     .catch(err => this.fetchFailure(err))
   }
 

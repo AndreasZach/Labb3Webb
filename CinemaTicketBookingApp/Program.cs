@@ -14,10 +14,7 @@ namespace CinemaTicketBookingApp
     {
         public static void Main(string[] args)
         {
-            //CreateHostBuilder(args).Build().Run();
-
             var host = CreateHostBuilder(args).Build();
-
             SeedDb(host);
             host.Run();
         }
@@ -28,7 +25,15 @@ namespace CinemaTicketBookingApp
             using (var scope = scopeFactory.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetService<SeedCinemaDb>();
-                seeder.SeedDataAsync().Wait();
+                try
+                {
+                    seeder.SeedDataAsync().Wait();
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
             }
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CinemaTicketBookingApp;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace CinemaTicketBookingApp.Controllers
 {
@@ -15,72 +16,34 @@ namespace CinemaTicketBookingApp.Controllers
     public class BookingDetailsController : ControllerBase
     {
         private readonly CinemaContext _context;
+        private readonly ILogger<BookingDetailsController> _logger;
 
-        public BookingDetailsController(CinemaContext context)
+        public BookingDetailsController(CinemaContext context, ILogger<BookingDetailsController> logger)
         {
             _context = context;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookingDetails>>> GetBookingDetails()
-        {
-            return await _context.BookingDetails.ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BookingDetails>> GetBookingDetails(Guid id)
-        {
-            var bookingDetails = await _context.BookingDetails.FindAsync(id);
-
-            if (bookingDetails == null)
-            {
-                return NotFound();
-            }
-
-            return bookingDetails;
-        }
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBookingDetails(Guid id, BookingDetails bookingDetails)
-        {
-            if (id != bookingDetails.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(bookingDetails).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookingDetailsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _logger = logger;
         }
 
         public async Task<ActionResult<BookingDetails>> PostBookingDetails([FromBody]BookingDetails bookingDetails)
         {
-            if(bookingDetails.Tickets.Count() <= 12)
+            try
             {
-                _context.BookingDetails.Add(bookingDetails);
-                await _context.SaveChangesAsync();
+                if (bookingDetails.Tickets.Count() <= 12)
+                {
+                    _context.BookingDetails.Add(bookingDetails);
+                    await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetBookingDetails", new { id = bookingDetails.Id }, bookingDetails);
+                    return CreatedAtAction("GetBookingDetails", new { id = bookingDetails.Id }, bookingDetails);
+                }
+
+                return BadRequest(new { error = "User tried to book more than 12 tickets." });
+            }
+            catch (Exception e)
+            {
+                ErrorLog(e);
+                return BadRequest(new { error = "An error occured while saving your booking information to the database. Please try again later." });
             }
             
-            return BadRequest(new { error="User tried to book more than 12 tickets."});
         }
 
         [HttpDelete("{id}")]
@@ -97,10 +60,9 @@ namespace CinemaTicketBookingApp.Controllers
 
             return bookingDetails;
         }
-
-        private bool BookingDetailsExists(Guid id)
+        private void ErrorLog(Exception e)
         {
-            return _context.BookingDetails.Any(e => e.Id == id);
+            _logger.LogError(e, e.Message);
         }
     }
 }

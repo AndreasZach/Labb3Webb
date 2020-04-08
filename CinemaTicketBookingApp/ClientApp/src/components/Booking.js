@@ -33,12 +33,16 @@ export class Booking extends Component {
         let bookingResult = FetchData.PostBookingDetails(tickets);
         bookingResult.then((result) => {
             if(result.error)
-                this.setState({bookingError: result.error, bookingComplete: true})
+                this.setState({bookingError: result.error, bookingComplete: true});
         })
         .then(() => {
             if(!this.state.bookingError)
                 FetchData.UpdateFilmItem(filmChanges)
-                .then(this.setState({bookingComplete:true}));
+                .then((result) => {
+                    if(result.error)
+                        this.setState({bookingError: result.error, bookingComplete: true});
+                    this.setState({bookingComplete:true})
+                });
         });
     }
 
@@ -49,7 +53,7 @@ export class Booking extends Component {
                     <ModalHeader>
                         {
                         (!this.state.bookingComplete) ? 
-                        <p>How many tickets do you wish to purchase?</p> :
+                        <p>Select the seats you wish to book (Maximum of 12 per order).</p> :
                         (!this.state.bookingError && this.state.bookingComplete) ?
                             <p>Successfully booked your tickets!</p> :
                             <p>Could not book tickets due to the following error: {this.state.bookingError} </p>}
