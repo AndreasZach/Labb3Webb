@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CinemaTicketBookingApp;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 
-namespace CinemaTicketBookingApp.Controllers
+namespace CinemaTicketBookingApp
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -33,8 +30,8 @@ namespace CinemaTicketBookingApp.Controllers
             }
             catch (Exception e)
             {
-                HandleError(e);
-                return BadRequest(new { error = "An error occured while getting data from the database, please try again later" });
+                ErrorLog(e);
+                return BadRequest(new { error = "An error occured while getting film-data from the database, please try again later" });
             }
         }
 
@@ -49,7 +46,7 @@ namespace CinemaTicketBookingApp.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException e)
             {
                 if (!FilmExists(film.Id))
                 {
@@ -57,7 +54,8 @@ namespace CinemaTicketBookingApp.Controllers
                 }
                 else
                 {
-                    throw;
+                    ErrorLog(e);
+                    return BadRequest(new { error = "Could not update the database." });
                 }
             }
 
@@ -79,7 +77,7 @@ namespace CinemaTicketBookingApp.Controllers
             return film;
         }
 
-        private void HandleError(Exception e) 
+        private void ErrorLog(Exception e) 
         {
             _logger.LogError(e, e.Message);
         }

@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CinemaTicketBookingApp;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 
-namespace CinemaTicketBookingApp.Controllers
+namespace CinemaTicketBookingApp
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -24,6 +21,20 @@ namespace CinemaTicketBookingApp.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BookingDetails>>> GetBookingDetails()
+        {
+            try
+            {
+                return await _context.BookingDetails.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                ErrorLog(e);
+                return BadRequest(new { error = "An error occured while getting bookingdetails from the database, please try again later" });
+            }
+        }
+
         public async Task<ActionResult<BookingDetails>> PostBookingDetails([FromBody]BookingDetails bookingDetails)
         {
             try
@@ -33,7 +44,7 @@ namespace CinemaTicketBookingApp.Controllers
                     _context.BookingDetails.Add(bookingDetails);
                     await _context.SaveChangesAsync();
 
-                    return CreatedAtAction("GetBookingDetails", new { id = bookingDetails.Id }, bookingDetails);
+                    return CreatedAtAction("GetBookingDetails", bookingDetails);
                 }
 
                 return BadRequest(new { error = "User tried to book more than 12 tickets." });

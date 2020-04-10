@@ -1,5 +1,6 @@
 import React, { Component, Fragment} from 'react';
-import { Collapse, Button, Card, CardTitle, CardSubtitle, CardBody } from 'reactstrap';
+import { Collapse, Card, CardTitle, CardSubtitle, CardBody } from 'reactstrap';
+import { FilmItemButton } from './FilmItemButton'
 import { Booking } from './Booking';
 
 export class FilmItem extends Component {
@@ -47,26 +48,9 @@ export class FilmItem extends Component {
             <Fragment>
                 <h6>Seats available: {this.props.film.Wings[0].FreeSeats + this.props.film.Wings[1].FreeSeats}</h6>
                 <h6> Price per ticket: {this.props.film.Price}:-</h6>
-                <Button className="m-1" 
-                disabled={this.props.film.Wings[0].FreeSeats < 1} 
-                color='success' 
-                onClick={() => this.openModal(this.props.film.Wings[0])}> 
-                   { 
-                   this.props.film.Wings[0].FreeSeats > 1 ? 
-                   'Book tickets in ' + this.props.film.Wings[0].WingAreaName :
-                   'Fully Booked'
-                   }
-                </Button>
-                <Button className="m-1"
-                disabled={this.props.film.Wings[1].FreeSeats < 1}
-                color="success"
-                onClick={() => this.openModal(this.props.film.Wings[1])}>
-                    { 
-                    this.props.film.Wings[1].FreeSeats > 1 ? 
-                    'Book tickets in ' + this.props.film.Wings[1].WingAreaName :
-                    'Fully Booked'
-                    }
-                </Button>
+                {this.props.film.Wings.map((item, i) => {
+                    return <FilmItemButton key={i} wing={item} onClickCallback={this.openModal} />
+                })}
                 <Booking 
                 setOpen={this.state.showModal} 
                 closeModal={this.closeModal} 
