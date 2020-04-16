@@ -70,7 +70,11 @@ export class FilmList extends Component {
                     !this.state.error ?
                     this.state.films.map((item, i) => 
                         {
-                            return <FilmItem key={i} film={item} requestUpdate={this.requestUpdateData} />
+                            return (<FilmItem key={i} 
+                                film={item} 
+                                requestUpdate={this.requestUpdateData} 
+                                fullyBooked = {(item.Wings[0].FreeSeats + item.Wings[1].FreeSeats) < 1}
+                                />);
                         }) :
                     <p className="text-danger">{this.state.error}</p>
                 }

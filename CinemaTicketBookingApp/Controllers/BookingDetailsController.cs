@@ -71,9 +71,7 @@ namespace CinemaTicketBookingApp
 
             return bookingDetails;
         }
-        private void ErrorLog(Exception e)
-        {
-            _logger.LogError(e, e.Message);
-        }
+
+        private void ErrorLog(Exception e) => _logger.LogError(e, e.Message);
     }
 }

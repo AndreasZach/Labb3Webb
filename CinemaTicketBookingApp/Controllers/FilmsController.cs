@@ -77,14 +77,9 @@ namespace CinemaTicketBookingApp
             return film;
         }
 
-        private void ErrorLog(Exception e) 
-        {
-            _logger.LogError(e, e.Message);
-        }
+        private void ErrorLog(Exception e) => _logger.LogError(e, e.Message);
 
-        private bool FilmExists(Guid id)
-        {
-            return _context.Films.Any(e => e.Id == id);
-        }
+        private bool FilmExists(Guid id) => _context.Films.Any(e => e.Id == id);
+        
     }
 }

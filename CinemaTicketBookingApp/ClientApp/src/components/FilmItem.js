@@ -9,7 +9,6 @@ export class FilmItem extends Component {
         super(props);
         this.state={
             isOpen: false,
-            fullyBooked: (props.film.Wings[0].FreeSeats + props.film.Wings[1].FreeSeats) < 1,
             showModal: false,
             selectedWing: {},
         };
@@ -36,7 +35,7 @@ export class FilmItem extends Component {
     }
 
     content = () => {
-        if(this.state.fullyBooked) {
+        if(this.props.fullyBooked) {
             return (
                 <div className="w-100 p-3 font-weight-bold"> 
                     <p>Fully booked! Try again tomorrow.</p>
@@ -63,7 +62,7 @@ export class FilmItem extends Component {
     }
 
     render() {
-        const classNames = `${this.state.fullyBooked ? 'filmBooked' : "bgcolor--pale color--blackblue"} align-items-center text-center m-1`;
+        const classNames = `${this.props.fullyBooked ? 'filmBooked' : "bgcolor--pale color--blackblue"} align-items-center text-center m-1`;
         return (
             <Card className={classNames} onClick={this.toggleCollapse} >
                 <CardTitle>
